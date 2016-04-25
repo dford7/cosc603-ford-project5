@@ -1,11 +1,14 @@
 package edu.towson.cis.cosc603.project5.coffeemaker;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import junit.framework.TestCase;
 
 /**
  *
  */
-public class CoffeeMakerTest extends TestCase {
+public class CoffeeMakerTest extends TestCase implements Cloneable{
 	private CoffeeMaker cm;
 	private Inventory i;
 	private Recipe r1;
@@ -38,5 +41,9 @@ public class CoffeeMakerTest extends TestCase {
 		newRecipe = r1;
 		newRecipe.setAmtSugar(2);
 		assertTrue(cm.editRecipe(r1, newRecipe));
+	}
+	private void readObject(ObjectInputStream stream) 
+            throws IOException, ClassNotFoundException{
+        stream.defaultReadObject();
 	}
 }

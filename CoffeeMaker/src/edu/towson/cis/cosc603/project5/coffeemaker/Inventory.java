@@ -1,11 +1,14 @@
 package edu.towson.cis.cosc603.project5.coffeemaker;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 /**
  * Inventory for the coffee maker
  * @author Josh
  * @version $Revision: 1.0 $
  */
-public class Inventory {
+public class Inventory implements Cloneable{
     
     private static int coffee;
     private static int milk;
@@ -17,6 +20,13 @@ public class Inventory {
     	setMilk(15);
     	setSugar(15);
     	setChocolate(15);
+    }
+    
+    public Inventory(int coffee, int milk, int sugar, int chocolate) {
+    	setCoffee(coffee);
+    	setMilk(milk);
+    	setSugar(sugar);
+    	setChocolate(chocolate);
     }
     
     /**
@@ -125,9 +135,24 @@ public class Inventory {
      * @return String
      */
     public String toString() {
-    	return "Coffee: " + getCoffee() + "\n" +
-			"Milk: " + getMilk() + "\n" +
-			"Sugar: " + getSugar() + "\n" +
-			"Chocolate: " + getChocolate() + "\n";
+    	return "Coffee: " + getCoffee() + System.getProperty("line.separator")  +
+			"Milk: " + getMilk() + System.getProperty("line.separator")  +
+			"Sugar: " + getSugar() + System.getProperty("line.separator")  +
+			"Chocolate: " + getChocolate() + System.getProperty("line.separator") ;
+    }
+    private void readObject(ObjectInputStream stream) 
+            throws IOException, ClassNotFoundException{
+        stream.defaultReadObject();
+	}
+    
+    public Inventory deepCopy(){    	
+		return new Inventory(coffee, milk, sugar, chocolate);    	
+    }
+    protected Object clone() throws CloneNotSupportedException {
+   	 
+        final Inventory clone=(Inventory)super.clone();
+     
+        return clone;
+        
     }
 }

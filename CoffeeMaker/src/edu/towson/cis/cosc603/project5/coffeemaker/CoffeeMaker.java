@@ -1,15 +1,19 @@
 package edu.towson.cis.cosc603.project5.coffeemaker;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 /**
  * CoffeeMaker object
  * @version $Revision: 1.0 $
  */
-public class CoffeeMaker {
+public class CoffeeMaker implements Cloneable{
 	/** Array of recipes in coffee maker */
 	private Recipe [] recipeArray;
 	/** Number of recipes in coffee maker */
-	private final int NUM_RECIPES = 4;
+	private static final int NUM_RECIPES = 4;
 	/** Array describing if the array is full */
-	private boolean [] recipeFull;
+	private final boolean [] recipeFull;
 	/** Inventory of the coffee maker */
     private Inventory inventory;
 	
@@ -38,7 +42,7 @@ public class CoffeeMaker {
         
         //Check for an empty recipe, add recipe to first empty spot
         if(canAddRecipe) {
-        	int emptySpot = indexOfEmptyRecipe();
+        	final int emptySpot = indexOfEmptyRecipe();
         	if(emptySpot != -1) {
         		recipeArray[emptySpot] = r;
         		recipeFull[emptySpot] = true;
@@ -69,7 +73,7 @@ public class CoffeeMaker {
 	 * @return
 	 */
 	private boolean isRecipeExisting(Recipe r) {
-		 boolean canAddRecipe = true;
+		// boolean canAddRecipe = true;
 		//Check if the recipe already exists
         for(int i = 0; i < NUM_RECIPES; i++) {
             if(r.equals(recipeArray[i])) {
@@ -90,7 +94,7 @@ public class CoffeeMaker {
         if(r != null) {
 	        for(int i = 0; i < NUM_RECIPES; i++) {
 	            if(r.equals(recipeArray[i])) {
-	                recipeArray[i] = recipeArray[i]; 
+	              //  recipeArray[i] = recipeArray[i]; 
 	                canDeleteRecipe = true;
 	            }
 	        }
@@ -107,15 +111,10 @@ public class CoffeeMaker {
     public boolean editRecipe(Recipe oldRecipe, Recipe newRecipe) {
         boolean canEditRecipe = false;
         for(int i = 0; i < NUM_RECIPES; i++) {
-        	if(recipeArray[i].getName() != null) {
-	            if(newRecipe.equals(recipeArray[i])) { 
-	            	recipeArray[i] = new Recipe();
-	            	if(addRecipe(newRecipe)) {
-	            		canEditRecipe = true;
-	            	} else {
-	            		canEditRecipe = false;
-	            	}
-	            }
+        	if(recipeArray[i].getName() != null && 
+        			newRecipe.equals(recipeArray[i]) ) {	           
+            	recipeArray[i] = new Recipe();            	
+            	canEditRecipe = addRecipe(newRecipe);            	
         	}
         }
         return canEditRecipe;
@@ -147,8 +146,10 @@ public class CoffeeMaker {
      * Returns the inventory of the coffee maker
     
      * @return Inventory */
-    public Inventory checkInventory() {
-        return inventory;
+    public final Inventory checkInventory() {
+    	final Inventory iv = new Inventory(inventory.getCoffee(), inventory.getMilk(),
+    			inventory.getSugar(), inventory.getChocolate()) ;
+        return iv;
     }
     
     /**
@@ -181,9 +182,16 @@ public class CoffeeMaker {
     /**
      * Returns an array of all the recipes
     
-     * @return Recipe[] */
-    public Recipe[] getRecipes() {
-        return recipeArray;
+     * @return Recipe[] 
+     * @throws CloneNotSupportedException */
+    public final  Recipe[] getRecipes() throws CloneNotSupportedException {  
+    	
+    	final Recipe [] reps = new Recipe[recipeArray.length] ;
+    	for (int i = 0; i < reps.length; i++) {
+    		reps[i] = (Recipe) recipeArray[i].clone();
+		}
+    	
+        return  reps;
     }
 
     /**
@@ -202,4 +210,19 @@ public class CoffeeMaker {
 		}
 		return r;
 	}
+	private void readObject(ObjectInputStream stream) 
+            throws IOException, ClassNotFoundException{
+        stream.defaultReadObject();
+	}
+	
+	protected Object clone() throws CloneNotSupportedException {
+   	 
+        final CoffeeMaker clone=(CoffeeMaker)super.clone();
+        
+        clone.recipeArray = recipeArray.clone();
+        clone.inventory = (Inventory)inventory.clone();
+        
+        return clone;
+        
+    }	
 }

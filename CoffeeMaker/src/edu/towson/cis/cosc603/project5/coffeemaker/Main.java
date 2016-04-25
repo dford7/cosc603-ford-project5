@@ -3,26 +3,27 @@ package edu.towson.cis.cosc603.project5.coffeemaker;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 
 /**
  * Starts the console UI for the CoffeeMaker
  * @author Josh
  * @version $Revision: 1.0 $
  */
-public class Main {
+public class Main implements Cloneable{
     private static CoffeeMaker coffeeMaker;
 
-    public static void mainMenu() {
+    public static void mainMenu() throws CloneNotSupportedException {
         System.out.println("1. Add a recipe");
         System.out.println("2. Delete a recipe");
         System.out.println("3. Edit a recipe");
         System.out.println("4. Add inventory");
         System.out.println("5. Check inventory");
         System.out.println("6. Make coffee");
-        System.out.println("0. Exit\n");
+        System.out.println("0. Exit" + System.getProperty("line.separator") );
         
         //Get user input
-        int userInput = stringToInt(inputOutput("Please press the number that corresponds to what you would like the coffee maker to do."));
+        final int userInput = stringToInt(inputOutput("Please press the number that corresponds to what you would like the coffee maker to do."));
         
         if(userInput == 1) addRecipe();
         if(userInput == 2) deleteRecipe();
@@ -32,47 +33,47 @@ public class Main {
         if(userInput == 6) makeCoffee();
         if(userInput == 0) System.exit(0);
     }
-	public static void addRecipe() {
+	public static void addRecipe() throws CloneNotSupportedException {
 	    //Read in recipe name
-	    String name = inputOutput("\nPlease enter the recipe name: ");
+		final String name = inputOutput(System.getProperty("line.separator")  + "Please enter the recipe name: ");
 	    
 	    //Read in recipe price
-	    String priceString = inputOutput("\nPlease enter the recipe price: $");
-	    int price = stringToInt(priceString);
+		final String priceString = inputOutput(System.getProperty("line.separator")  + "Please enter the recipe price: $");
+		final int price = stringToInt(priceString);
 	    if(price < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt coffee
-	    String coffeeString = inputOutput("\nPlease enter the units of coffee in the recipe: ");
-	    int amtCoffee = stringToInt(coffeeString);
+	    final String coffeeString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of coffee in the recipe: ");
+	    final int amtCoffee = stringToInt(coffeeString);
 	    if(amtCoffee < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt milk
-	    String milkString = inputOutput("\nPlease enter the units of milk in the recipe: ");
-	    int amtMilk = stringToInt(milkString);
+	    final String milkString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of milk in the recipe: ");
+	    final int amtMilk = stringToInt(milkString);
 	    if(amtMilk < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt sugar
-	    String sugarString = inputOutput("\nPlease enter the units of sugar in the recipe: ");
-	    int amtSugar = stringToInt(sugarString);
+	    final String sugarString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of sugar in the recipe: ");
+	    final int amtSugar = stringToInt(sugarString);
 	    if(amtSugar < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt chocolate
-	    String chocolateString = inputOutput("\nPlease enter the units of chocolate in the recipe: ");
-	    int amtChocolate = stringToInt(chocolateString);
+	    final String chocolateString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of chocolate in the recipe: ");
+	    final int amtChocolate = stringToInt(chocolateString);
 	    if(amtChocolate < 0) {
 	    	mainMenu();
 	    }
 	    
-	    boolean recipeAdded = false;
-		Recipe r = new Recipe(name, price, amtChocolate, 
+	 //   boolean recipeAdded = false;
+	    final Recipe r = new Recipe(name, price, amtChocolate, 
 				amtMilk, amtSugar, amtChocolate);
 	/*	r.setName(name);
 		r.setPrice(price);
@@ -81,84 +82,93 @@ public class Main {
 		r.setAmtSugar(amtSugar);
 		r.setAmtChocolate(amtChocolate);
 		  */ 
-		recipeAdded = coffeeMaker.addRecipe(r);
+	    final boolean recipeAdded = coffeeMaker.addRecipe(r);
 	    
-	    if(recipeAdded) System.out.println(name + " successfully added.");
-	    else System.out.println(name + "could not be added.");
-	    
+	    if(recipeAdded) {
+	    	System.out.println(name + " successfully added.");
+	    }
+	    else {
+	    	System.out.println(name + "could not be added.");
+	    }
 	    mainMenu();
     }
     
-    public static void deleteRecipe() {
-        Recipe [] recipes = coffeeMaker.getRecipes();
+    public static void deleteRecipe() throws CloneNotSupportedException {
+    	final Recipe [] recipes = coffeeMaker.getRecipes();
         for(int i = 0; i < recipes.length; i++) {
             System.out.println((i+1) + ". " + recipes[i].getName());
         }
-        String recipeToDeleteString = inputOutput("Please select the number of the recipe to delete.");
-        int recipeToDelete = stringToInt(recipeToDeleteString) - 1;
+        final String recipeToDeleteString = inputOutput("Please select the number of the recipe to delete.");
+        final int recipeToDelete = stringToInt(recipeToDeleteString) - 1;
 	    if(recipeToDelete < 0) {
 	    	mainMenu();
 	    }
         
-        boolean recipeDeleted = coffeeMaker.deleteRecipe(recipes[recipeToDelete]);
+	    final boolean recipeDeleted = coffeeMaker.deleteRecipe(recipes[recipeToDelete]);
         
-        if(recipeDeleted) System.out.println(recipes[recipeToDelete].getName() + " successfully deleted.");
-	    else System.out.println(recipes[recipeToDelete].getName() + "could not be deleted.");
+        if(recipeDeleted) 
+        	{
+        	System.out.println(recipes[recipeToDelete].getName() + " successfully deleted.");
+        	}
+	    else 
+	    	{
+	    	System.out.println(recipes[recipeToDelete].getName() + "could not be deleted.");
+	    	}
         
         mainMenu();
     }
     
-    public static void editRecipe() {
-        Recipe [] recipes = coffeeMaker.getRecipes();
+    public static void editRecipe() throws CloneNotSupportedException {
+    	final Recipe [] recipes = coffeeMaker.getRecipes();
         for(int i = 0; i < recipes.length; i++) {
             System.out.println((i+1) + ". " + recipes[i].getName());
         }
-        String recipeToEditString = inputOutput("Please select the number of the recipe to edit.");
-        int recipeToEdit = stringToInt(recipeToEditString) -1;
+        final String recipeToEditString = inputOutput("Please select the number of the recipe to edit.");
+        final int recipeToEdit = stringToInt(recipeToEditString) -1;
 	    if(recipeToEdit < 0) {
 	    	mainMenu();
 	    }
         
-        Recipe oldRecipe = recipes[recipeToEdit];
+	    final Recipe oldRecipe = recipes[recipeToEdit];
         
 	    //Read in recipe name
-	    String name = inputOutput("\nPlease enter the recipe name: ");
+	    final String name = inputOutput(System.getProperty("line.separator")  + "Please enter the recipe name: ");
 	    
 	    //Read in recipe price
-	    String priceString = inputOutput("\nPlease enter the recipe price: $");
-	    int price = stringToInt(priceString);
+	    final String priceString = inputOutput(System.getProperty("line.separator")  + "Please enter the recipe price: $");
+	    final int price = stringToInt(priceString);
 	    if(price < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt coffee
-	    String coffeeString = inputOutput("\nPlease enter the units of coffee in the recipe: ");
-	    int amtCoffee = stringToInt(coffeeString);
+	    final String coffeeString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of coffee in the recipe: ");
+	    final int amtCoffee = stringToInt(coffeeString);
 	    if(amtCoffee < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt milk
-	    String milkString = inputOutput("\nPlease enter the units of milk in the recipe: ");
-	    int amtMilk = stringToInt(milkString);
+	    final String milkString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of milk in the recipe: ");
+	    final int amtMilk = stringToInt(milkString);
 	    if(amtMilk < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt sugar
-	    String sugarString = inputOutput("\nPlease enter the units of sugar in the recipe: ");
-	    int amtSugar = stringToInt(sugarString);
+	    final String sugarString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of sugar in the recipe: ");
+	    final int amtSugar = stringToInt(sugarString);
 	    if(amtSugar < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt chocolate
-	    String chocolateString = inputOutput("\nPlease enter the units of chocolate in the recipe: ");
-	    int amtChocolate = stringToInt(chocolateString);
+	    final String chocolateString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of chocolate in the recipe: ");
+	    final int amtChocolate = stringToInt(chocolateString);
 	    if(amtChocolate < 0) {
 	    	mainMenu();
 	    }
-	    Recipe newRecipe = new Recipe(name, price, amtChocolate, 
+	    final Recipe newRecipe = new Recipe(name, price, amtChocolate, 
 				amtMilk, amtSugar, amtChocolate);
 	  /*  Recipe newRecipe = new Recipe();
 	    newRecipe.setName(name);
@@ -168,39 +178,45 @@ public class Main {
 	    newRecipe.setAmtSugar(amtSugar);
 	    newRecipe.setAmtChocolate(amtChocolate);
         */
-        boolean recipeEdited = coffeeMaker.editRecipe(oldRecipe, newRecipe);
+	    final boolean recipeEdited = coffeeMaker.editRecipe(oldRecipe, newRecipe);
         
-        if(recipeEdited) System.out.println(oldRecipe.getName() + " successfully edited.");
-	    else System.out.println(oldRecipe.getName() + "could not be edited.");
+        if(recipeEdited)
+        	{
+        	System.out.println(oldRecipe.getName() + " successfully edited.");
+        	}
+	    else 
+	    	{
+	    	System.out.println(oldRecipe.getName() + "could not be edited.");
+	    	}
         
         mainMenu();
     }
     
-    public static void addInventory() {
+    public static void addInventory() throws CloneNotSupportedException {
 	    //Read in amt coffee
-	    String coffeeString = inputOutput("\nPlease enter the units of coffee to add: ");
-	    int amtCoffee = stringToInt(coffeeString);
+    	final String coffeeString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of coffee to add: ");
+    	final int amtCoffee = stringToInt(coffeeString);
 	    if(amtCoffee < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt milk
-	    String milkString = inputOutput("\nPlease enter the units of milk to add: ");
-	    int amtMilk = stringToInt(milkString);
+	    final String milkString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of milk to add: ");
+	    final int amtMilk = stringToInt(milkString);
 	    if(amtMilk < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt sugar
-	    String sugarString = inputOutput("\nPlease enter the units of sugar to add: ");
-	    int amtSugar = stringToInt(sugarString);
+	    final String sugarString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of sugar to add: ");
+	    final int amtSugar = stringToInt(sugarString);
 	    if(amtSugar < 0) {
 	    	mainMenu();
 	    }
 	    
 	    //Read in amt chocolate
-	    String chocolateString = inputOutput("\nPlease enter the units of chocolate to add: ");
-	    int amtChocolate = stringToInt(chocolateString);
+	    final String chocolateString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of chocolate to add: ");
+	    final int amtChocolate = stringToInt(chocolateString);
 	    if(amtChocolate < 0) {
 	    	mainMenu();
 	    }
@@ -209,33 +225,33 @@ public class Main {
         mainMenu();
     }
     
-    public static void checkInventory() {
-        Inventory inventory = coffeeMaker.checkInventory();
+    public static void checkInventory() throws CloneNotSupportedException {
+    	final Inventory inventory = coffeeMaker.checkInventory();
         System.out.println(inventory.toString());
         mainMenu();
     }
     
-    public static void makeCoffee() {
-        Recipe [] recipes = coffeeMaker.getRecipes();
+    public static void makeCoffee() throws CloneNotSupportedException {
+    	final Recipe [] recipes = coffeeMaker.getRecipes();
         for(int i = 0; i < recipes.length; i++) {
             System.out.println((i+1) + ". " + recipes[i].getName());
         }
-        String recipeToPurchaseString = inputOutput("Please select the number of the recipe to purchase.");
-        int recipeToPurchase = stringToInt(recipeToPurchaseString) -1;
+        final String recipeToPurchaseString = inputOutput("Please select the number of the recipe to purchase.");
+        final int recipeToPurchase = stringToInt(recipeToPurchaseString) -1;
 	    if(recipeToPurchase < 0) {
 	    	mainMenu();
 	    }
         
-        String amountPaid = inputOutput("Please enter the amount you wish to pay");
-        int amountToPay = stringToInt(amountPaid);
+	    final String amountPaid = inputOutput("Please enter the amount you wish to pay");
+	    final int amountToPay = stringToInt(amountPaid);
 	    if(amountToPay < 0) {
 	    	mainMenu();
 	    }
         
-        Recipe recipe = recipes[recipeToPurchase];
-        int change = coffeeMaker.makeCoffee(recipe, amountToPay);
+	    final Recipe recipe = recipes[recipeToPurchase];
+	    final int change = coffeeMaker.makeCoffee(recipe, amountToPay);
         
-        System.out.println("Your change is: " + change + "\n");
+        System.out.println("Your change is: " + change + System.getProperty("line.separator")  + "");
         mainMenu();
     }
     
@@ -243,15 +259,17 @@ public class Main {
      * Method inputOutput.
      * @param message String
      * @return String
+     * @throws CloneNotSupportedException 
      */
-    public static String inputOutput(String message) {
+    public static String inputOutput(String message) throws CloneNotSupportedException {
         System.out.println(message);
-	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	    String returnString = "";
-	    try {
+	    try {	    	
 	        returnString = br.readLine();
 	    }
 	    catch (IOException e){
+	    	e.printStackTrace();
 	        System.out.println("Error reading in value");
 	        mainMenu();
 	    }
@@ -269,7 +287,8 @@ public class Main {
             returnInt = Integer.parseInt(value);
         }
         catch (NumberFormatException e) {
-            System.out.println("Please input an integer\n");
+        	e.printStackTrace();
+            System.out.println("Please input an integer" + System.getProperty("line.separator") );
         }
         return returnInt;
     }
@@ -277,10 +296,16 @@ public class Main {
     /**
      * Method main.
      * @param args String[]
+     * @throws CloneNotSupportedException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
 	    coffeeMaker = new CoffeeMaker();
-	    System.out.println("Welcome to the CoffeeMaker!\n");
+	    System.out.println("Welcome to the CoffeeMaker!" + System.getProperty("line.separator") );
 	    mainMenu();
+	}
+    
+    private void readObject(ObjectInputStream stream) 
+            throws IOException, ClassNotFoundException{
+        stream.defaultReadObject();
 	}
 }

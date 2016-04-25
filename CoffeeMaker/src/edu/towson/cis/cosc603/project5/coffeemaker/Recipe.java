@@ -1,11 +1,15 @@
 package edu.towson.cis.cosc603.project5.coffeemaker;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Objects;
+
 /**
  * Recipe object for the coffee maker
  * @author Josh
  * @version $Revision: 1.0 $
  */
-public class Recipe {
+public class Recipe implements Cloneable{
     private String name;
     private int price;
     private int amtCoffee;
@@ -123,18 +127,36 @@ public class Recipe {
      * @param r Recipe
      * @return boolean
      */
-    public boolean equals(Recipe r) {
-        if(r.getName() == null) {
-	    	return false;
-    	}	
-        if(this.name == null) {
-        	return false;
-        }
-        if((this.name).equals(r.getName())) {
-            return true;
-        }
-        return false;
+    public boolean equals(Object r) {
+    	if (this == r) {
+    		return true;
+		}
+    	if (r instanceof Recipe) {
+    		final Recipe rep = (Recipe) r;
+    		
+    		if (rep.getName() == null 
+    				|| this.name == null) {
+				return false;
+			}
+    		if ((this.name).equals(rep.getName())) {
+    			return true;
+			}    		
+		}
+    	return false;       
     }
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + this.price;
+        hash = 97 * hash + this.amtCoffee;
+        hash = 97 * hash + this.amtMilk;
+        hash = 97 * hash + this.amtSugar;
+        hash = 97 * hash + this.amtChocolate;
+    	return hash;       
+    }
+    
     /**
      * Method toString.
      * @return String
@@ -142,4 +164,24 @@ public class Recipe {
     public String toString() {
     	return name;
     }
+    
+    private void readObject(ObjectInputStream stream) 
+            throws IOException, ClassNotFoundException{
+        stream.defaultReadObject();
+	}
+    
+    public final  Recipe deepCopy(){
+    	final Recipe rep = new Recipe(name, price, amtCoffee, 
+    			amtMilk, amtSugar, amtChocolate);
+    	return rep;
+    }
+    
+    protected Object clone() throws CloneNotSupportedException {
+    	 
+    	final Recipe clone=(Recipe)super.clone();
+     
+        return clone;
+        
+    }
+    
 }
