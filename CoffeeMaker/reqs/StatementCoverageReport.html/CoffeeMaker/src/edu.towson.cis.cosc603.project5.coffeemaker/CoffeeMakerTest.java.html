@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CoffeeMakerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CoffeeMaker (Apr 24, 2016 6:32:59 PM)</a> &gt; <a href="../../index.html" class="el_group">CoffeeMaker</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">edu.towson.cis.cosc603.project5.coffeemaker</a> &gt; <span class="el_source">CoffeeMakerTest.java</span></div><h1>CoffeeMakerTest.java</h1><pre class="source lang-java linenums">package edu.towson.cis.cosc603.project5.coffeemaker;
+
+import org.junit.Test;
+
+import junit.framework.TestCase;
+
+/**
+ *
+ */
+<span class="fc" id="L10">public class CoffeeMakerTest extends TestCase implements Cloneable{</span>
+	private CoffeeMaker cm;
+	private Inventory iv;
+	private Recipe r1;
+
+	public void setUp() {
+<span class="fc" id="L16">		cm = new CoffeeMaker();</span>
+<span class="fc" id="L17">		iv = cm.checkInventory();</span>
+
+<span class="fc" id="L19">		r1 = new Recipe(&quot;Coffee&quot;, 50, 6, 1, 1, 0);</span>
+	/*	r1.setName(&quot;Coffee&quot;);
+		r1.setPrice(50);
+		r1.setAmtCoffee(6);
+		r1.setAmtMilk(1);
+		r1.setAmtSugar(1);
+		r1.setAmtChocolate(0);*/
+<span class="fc" id="L26">	}</span>
+
+	@Test
+	public void testAddRecipe1() {
+<span class="fc" id="L30">		assertTrue(cm.addRecipe(r1));</span>
+<span class="fc" id="L31">	}</span>
+
+	@Test
+	public void testDeleteRecipe1() {
+<span class="fc" id="L35">		cm.addRecipe(r1);</span>
+<span class="fc" id="L36">		assertTrue(cm.deleteRecipe(r1));</span>
+<span class="fc" id="L37">	}</span>
+
+	@Test
+	public void testEditRecipe1() {
+<span class="fc" id="L41">		cm.addRecipe(r1);</span>
+<span class="fc" id="L42">		Recipe newRecipe = new Recipe();</span>
+<span class="fc" id="L43">		newRecipe = r1;</span>
+<span class="fc" id="L44">		newRecipe.setAmtSugar(2);</span>
+<span class="fc" id="L45">		assertTrue(cm.editRecipe(r1, newRecipe));</span>
+<span class="fc" id="L46">	}</span>
+	
+	@Test
+	public void testAddInventory2(){
+		
+<span class="fc" id="L51">		assertFalse(cm.addInventory(iv.getCoffee(), -5, iv.getSugar()</span>
+<span class="fc" id="L52">				, iv.getChocolate()));</span>
+			
+<span class="fc" id="L54">	}</span>
+	
+	@Test
+	public void testAddInventory1(){
+		
+<span class="fc" id="L59">		assertTrue(cm.addInventory(iv.getCoffee(), iv.getMilk(), iv.getSugar()</span>
+<span class="fc" id="L60">				, iv.getChocolate()));</span>
+			
+<span class="fc" id="L62">	}</span>
+	
+	@Test
+	public void testCheckInventory(){
+<span class="fc" id="L66">		Inventory t = cm.checkInventory();</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">		assertTrue(t != null);</span>
+<span class="fc" id="L68">		assertEquals(t.getChocolate(), 15);		</span>
+<span class="fc" id="L69">		assertEquals(t.getCoffee(), 15);</span>
+<span class="fc" id="L70">		assertEquals(t.getMilk(), 15);</span>
+<span class="fc" id="L71">		assertEquals(t.getSugar(), 15);	</span>
+<span class="fc" id="L72">	}</span>
+	
+	@Test
+	public void testPurchaseBeverage1(){
+<span class="fc" id="L76">		cm.addRecipe(r1);</span>
+<span class="fc" id="L77">		assertEquals(10,cm.makeCoffee(r1, 60));</span>
+<span class="fc" id="L78">	}</span>
+		
+	@Test
+	public void testisRecipeExisting(){
+<span class="fc" id="L82">		Recipe r2 = new Recipe(&quot;Lemon juice&quot;, 50, 6, 1, 1, 0);</span>
+<span class="fc" id="L83">		cm.addRecipe(r2);</span>
+<span class="fc" id="L84">		assertFalse(cm.addRecipe(r2));		</span>
+<span class="fc" id="L85">	}</span>
+	
+	@Test
+	public void testMakeCoffee1(){
+<span class="fc" id="L89">		Recipe r2 = new Recipe(&quot;Coffee&quot;, 50, 600, 100, 100, 300);</span>
+<span class="fc" id="L90">		cm.addRecipe(r2);</span>
+<span class="fc" id="L91">		assertEquals(50, cm.makeCoffee(r2, 50));		</span>
+<span class="fc" id="L92">	}</span>
+	
+	@Test
+	public void testMakeCoffee2(){
+<span class="fc" id="L96">		cm.addRecipe(r1);</span>
+<span class="fc" id="L97">		assertEquals(5, cm.makeCoffee(r1, 5));		</span>
+<span class="fc" id="L98">	}</span>
+	
+	@Test
+	public void testGetRecipes(){
+		try {
+<span class="fc" id="L103">			Recipe [] rep = cm.getRecipes();</span>
+<span class="fc" id="L104">			assertEquals(4, rep.length);</span>
+			
+<span class="pc" id="L106">		} catch (CloneNotSupportedException e) {</span>
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		
+<span class="fc" id="L111">	}</span>
+	
+	@Test
+	public void testGetRecipeForName(){
+<span class="fc" id="L115">		cm.addRecipe(r1);</span>
+<span class="fc" id="L116">		Recipe t = cm.getRecipeForName(r1.getName());</span>
+<span class="fc" id="L117">		assertTrue(t.getName().equals(r1.getName()));		</span>
+<span class="fc" id="L118">	}</span>
+	
+	@Test
+	public void testClone(){
+<span class="fc" id="L122">		cm.addRecipe(r1);</span>
+		try {
+<span class="fc" id="L124">			CoffeeMaker c = (CoffeeMaker)cm.clone();</span>
+<span class="fc" id="L125">			assertTrue(c.getRecipeForName(r1.getName()).equals(cm.getRecipeForName(r1.getName())));</span>
+<span class="pc" id="L126">		} catch (CloneNotSupportedException e) {</span>
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+<span class="fc" id="L130">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>CoffeeMaker (Apr 24, 2016 6:32:59 PM)</div></body></html>

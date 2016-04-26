@@ -178,7 +178,7 @@ public class CoffeeMaker implements Cloneable{
         }
         else {
             return amtPaid;
-        }
+        }        
     }
 
     /**

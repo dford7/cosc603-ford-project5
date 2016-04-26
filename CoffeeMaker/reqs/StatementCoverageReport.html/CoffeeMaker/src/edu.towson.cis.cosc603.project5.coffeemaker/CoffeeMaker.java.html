@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CoffeeMaker.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CoffeeMaker (Apr 24, 2016 6:32:59 PM)</a> &gt; <a href="../../index.html" class="el_group">CoffeeMaker</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">edu.towson.cis.cosc603.project5.coffeemaker</a> &gt; <span class="el_source">CoffeeMaker.java</span></div><h1>CoffeeMaker.java</h1><pre class="source lang-java linenums">package edu.towson.cis.cosc603.project5.coffeemaker;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+/**
+ * CoffeeMaker object
+ * @version $Revision: 1.0 $
+ */
+public class CoffeeMaker implements Cloneable{
+	/** Array of recipes in coffee maker */
+	private Recipe [] recipeArray;
+	/** Number of recipes in coffee maker */
+	private static final int NUM_RECIPES = 4;
+	/** Array describing if the array is full */
+	private final boolean [] recipeFull;
+	/** Inventory of the coffee maker */
+    private Inventory inventory;
+	
+    /**
+     * Constructor for the coffee maker
+     *
+     */
+<span class="fc" id="L24">	public CoffeeMaker() {</span>
+<span class="fc" id="L25">	    recipeArray = new Recipe[NUM_RECIPES];</span>
+<span class="fc" id="L26">	    recipeFull = new boolean[NUM_RECIPES];</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		for(int i = 0; i &lt; NUM_RECIPES; i++) {</span>
+<span class="fc" id="L28">		   recipeArray[i] = new Recipe();</span>
+<span class="fc" id="L29">		   recipeFull[i] = false;</span>
+		}
+<span class="fc" id="L31">		inventory = new Inventory();</span>
+<span class="fc" id="L32">	}</span>
+
+	/**
+	 * Returns true if a recipe is successfully added to the 
+	 * coffee maker
+	 * @param r
+	
+	 * @return boolean */
+	public boolean addRecipe(Recipe r) {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        boolean canAddRecipe = !(isRecipeExisting(r));</span>
+        
+        //Check for an empty recipe, add recipe to first empty spot
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if(canAddRecipe) {</span>
+<span class="fc" id="L45">        	final int emptySpot = indexOfEmptyRecipe();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        	if(emptySpot != -1) {</span>
+<span class="fc" id="L47">        		recipeArray[emptySpot] = r;</span>
+<span class="fc" id="L48">        		recipeFull[emptySpot] = true;</span>
+<span class="fc" id="L49">        	}</span>
+        	else {
+<span class="fc" id="L51">        		canAddRecipe = false;</span>
+        	}
+        }
+<span class="fc" id="L54">        return canAddRecipe;</span>
+    }
+
+	/**
+	 * @return
+	 */
+	private int indexOfEmptyRecipe() {
+<span class="fc" id="L61">		int emptySpot = -1;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		for(int i = 0; i &lt; NUM_RECIPES; i++) {</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">			if(!recipeFull[i]) {</span>
+<span class="fc" id="L64">				emptySpot = i;</span>
+<span class="fc" id="L65">				break;</span>
+			}
+		}
+<span class="fc" id="L68">		return emptySpot;</span>
+	}
+
+	/**
+	 * @param r
+	 * @param canAddRecipe
+	 * @return
+	 */
+	private boolean isRecipeExisting(Recipe r) {
+		// boolean canAddRecipe = true;
+		//Check if the recipe already exists
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for(int i = 0; i &lt; NUM_RECIPES; i++) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if(r.equals(recipeArray[i])) {</span>
+<span class="fc" id="L81">               return true;</span>
+            }
+        }
+<span class="fc" id="L84">		return false;</span>
+	}
+    
+	/**
+	 * Returns true if the recipe was deleted from the 
+	 * coffee maker
+	 * @param r
+	
+	 * @return boolean */
+    public boolean deleteRecipe(Recipe r) {
+<span class="fc" id="L94">        boolean canDeleteRecipe = false;</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if(r != null) {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">	        for(int i = 0; i &lt; NUM_RECIPES; i++) {</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">	            if(r.equals(recipeArray[i])) {</span>
+	              //  recipeArray[i] = recipeArray[i]; 
+<span class="fc" id="L99">	                canDeleteRecipe = true;</span>
+	            }
+	        }
+        }
+<span class="fc" id="L103">        return canDeleteRecipe;</span>
+    }
+    
+    /**
+     * Returns true if the recipe is successfully edited
+     * @param oldRecipe
+     * @param newRecipe
+    
+     * @return boolean */
+    public boolean editRecipe(Recipe oldRecipe, Recipe newRecipe) {
+<span class="fc" id="L113">        boolean canEditRecipe = false;</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        for(int i = 0; i &lt; NUM_RECIPES; i++) {</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        	if(recipeArray[i].getName() != null &amp;&amp; </span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        			newRecipe.equals(recipeArray[i]) ) {	           </span>
+<span class="fc" id="L117">            	recipeArray[i] = new Recipe();            	</span>
+<span class="fc" id="L118">            	canEditRecipe = addRecipe(newRecipe);   </span>
+<span class="fc" id="L119">            	canEditRecipe = true;</span>
+        	}
+        }
+<span class="fc" id="L122">        return canEditRecipe;</span>
+    }
+    
+    /**
+     * Returns true if inventory was successfully added
+     * @param amtCoffee
+     * @param amtMilk
+     * @param amtSugar
+     * @param amtChocolate
+    
+     * @return boolean */
+    public boolean addInventory(int amtCoffee, int amtMilk, int amtSugar, int amtChocolate) {
+<span class="fc" id="L134">        boolean canAddInventory = true;</span>
+<span class="pc bpc" id="L135" title="3 of 8 branches missed.">        if(amtCoffee &lt; 0 || amtMilk &lt; 0 || amtSugar &lt;  0 || amtChocolate &lt; 0) { </span>
+<span class="fc" id="L136">            canAddInventory = false;</span>
+<span class="fc" id="L137">        }</span>
+        else {
+<span class="fc" id="L139">	        inventory.setCoffee(inventory.getCoffee() + amtCoffee);</span>
+<span class="fc" id="L140">	        inventory.setMilk(inventory.getMilk() + amtMilk);</span>
+<span class="fc" id="L141">	        inventory.setSugar(inventory.getSugar() + amtSugar);</span>
+<span class="fc" id="L142">	        inventory.setChocolate(inventory.getChocolate() + amtChocolate);</span>
+        }
+<span class="fc" id="L144">        return canAddInventory;</span>
+    }
+    
+    /**
+     * Returns the inventory of the coffee maker
+    
+     * @return Inventory */
+    public final Inventory checkInventory() {
+<span class="fc" id="L152">    	final Inventory iv = new Inventory(inventory.getCoffee(), inventory.getMilk(),</span>
+<span class="fc" id="L153">    			inventory.getSugar(), inventory.getChocolate()) ;</span>
+<span class="fc" id="L154">        return iv;</span>
+    }
+    
+    /**
+     * Returns the change of a user's beverage purchase, or
+     * the user's money if the beverage cannot be made
+     * @param r
+     * @param amtPaid
+    
+     * @return int */
+    public int makeCoffee(Recipe r, int amtPaid) {
+<span class="fc" id="L165">        boolean canMakeCoffee = true;</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if(amtPaid &lt; r.getPrice()) {</span>
+<span class="fc" id="L167">            canMakeCoffee = false;</span>
+        }
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if(!inventory.enoughIngredients(r)) {</span>
+<span class="fc" id="L170">            canMakeCoffee = false;</span>
+        }
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if(canMakeCoffee) {</span>
+<span class="fc" id="L173">	        inventory.setCoffee(inventory.getCoffee() + r.getAmtCoffee()); </span>
+<span class="fc" id="L174">	        inventory.setMilk(inventory.getMilk() - r.getAmtMilk());</span>
+<span class="fc" id="L175">	        inventory.setSugar(inventory.getSugar() - r.getAmtSugar());</span>
+<span class="fc" id="L176">	        inventory.setChocolate(inventory.getChocolate() - r.getAmtChocolate());</span>
+<span class="fc" id="L177">            return amtPaid - r.getPrice();</span>
+        }
+        else {
+<span class="fc" id="L180">            return amtPaid;</span>
+        }        
+    }
+
+    /**
+     * Returns an array of all the recipes
+    
+     * @return Recipe[] 
+     * @throws CloneNotSupportedException */
+    public final  Recipe[] getRecipes() throws CloneNotSupportedException {  
+    	
+<span class="fc" id="L191">    	final Recipe [] reps = new Recipe[recipeArray.length] ;</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">    	for (int i = 0; i &lt; reps.length; i++) {</span>
+<span class="fc" id="L193">    		reps[i] = (Recipe) recipeArray[i].clone();</span>
+		}
+    	
+<span class="fc" id="L196">        return  reps;</span>
+    }
+
+    /**
+     * Returns the Recipe associated with the given name
+     * @param name
+    
+     * @return Recipe */
+	public Recipe getRecipeForName(String name) {
+<span class="fc" id="L205">		Recipe r = new Recipe();</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">		for(int i = 0; i &lt; NUM_RECIPES; i++) {</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">			if(recipeArray[i].getName() != null) { </span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">				if((recipeArray[i].getName()).equals(name)) {</span>
+<span class="fc" id="L209">					r = recipeArray[i];</span>
+				}
+			}
+		}
+<span class="fc" id="L213">		return r;</span>
+	}
+	private void readObject(ObjectInputStream stream) 
+            throws IOException, ClassNotFoundException{
+<span class="nc" id="L217">        stream.defaultReadObject();</span>
+<span class="nc" id="L218">	}</span>
+	
+	protected Object clone() throws CloneNotSupportedException {
+   	 
+<span class="fc" id="L222">        final CoffeeMaker clone=(CoffeeMaker)super.clone();</span>
+        
+<span class="fc" id="L224">        clone.recipeArray = recipeArray.clone();</span>
+<span class="fc" id="L225">        clone.inventory = (Inventory)inventory.clone();</span>
+        
+<span class="fc" id="L227">        return clone;</span>
+        
+    }	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>CoffeeMaker (Apr 24, 2016 6:32:59 PM)</div></body></html>

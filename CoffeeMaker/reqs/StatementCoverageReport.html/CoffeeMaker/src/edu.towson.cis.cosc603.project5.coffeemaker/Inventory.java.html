@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Inventory.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CoffeeMaker (Apr 24, 2016 6:32:59 PM)</a> &gt; <a href="../../index.html" class="el_group">CoffeeMaker</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">edu.towson.cis.cosc603.project5.coffeemaker</a> &gt; <span class="el_source">Inventory.java</span></div><h1>Inventory.java</h1><pre class="source lang-java linenums">package edu.towson.cis.cosc603.project5.coffeemaker;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+/**
+ * Inventory for the coffee maker
+ * @author Josh
+ * @version $Revision: 1.0 $
+ */
+public class Inventory implements Cloneable{
+    
+    private static int coffee;
+    private static int milk;
+    private static int sugar;
+    private static int chocolate;
+    
+<span class="fc" id="L18">    public Inventory() {</span>
+<span class="fc" id="L19">    	setCoffee(15);</span>
+<span class="fc" id="L20">    	setMilk(15);</span>
+<span class="fc" id="L21">    	setSugar(15);</span>
+<span class="fc" id="L22">    	setChocolate(15);</span>
+<span class="fc" id="L23">    }</span>
+    
+<span class="fc" id="L25">    public Inventory(int coffee, int milk, int sugar, int chocolate) {</span>
+<span class="fc" id="L26">    	setCoffee(coffee);</span>
+<span class="fc" id="L27">    	setMilk(milk);</span>
+<span class="fc" id="L28">    	setSugar(sugar);</span>
+<span class="fc" id="L29">    	setChocolate(chocolate);</span>
+<span class="fc" id="L30">    }</span>
+    
+    /**
+     * Method getChocolate.
+     * @return int
+     */
+    public int getChocolate() {
+<span class="fc" id="L37">        return chocolate;</span>
+    }
+    /**
+     * Method setChocolate.
+     * @param chocolate int
+     */
+    public void setChocolate(int chocolate) {
+<span class="fc bfc" id="L44" title="All 2 branches covered.">    	if(chocolate &gt;= 0) {</span>
+<span class="fc" id="L45">    		Inventory.chocolate = chocolate;</span>
+<span class="fc" id="L46">    	}</span>
+    	else {
+<span class="fc" id="L48">    		Inventory.chocolate = 0;</span>
+    	}
+        
+<span class="fc" id="L51">    }</span>
+    /**
+     * Method getCoffee.
+     * @return int
+     */
+    public int getCoffee() {
+<span class="fc" id="L57">        return coffee;</span>
+    }
+    /**
+     * Method setCoffee.
+     * @param coffee int
+     */
+    public void setCoffee(int coffee) {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">    	if(coffee &gt;= 0) {</span>
+<span class="fc" id="L65">    		Inventory.coffee = coffee;</span>
+<span class="fc" id="L66">    	}</span>
+    	else {
+<span class="fc" id="L68">    		Inventory.coffee = 0;</span>
+    	}
+<span class="fc" id="L70">    }</span>
+    /**
+     * Method getMilk.
+     * @return int
+     */
+    public int getMilk() {
+<span class="fc" id="L76">        return milk;</span>
+    }
+    /**
+     * Method setMilk.
+     * @param milk int
+     */
+    public void setMilk(int milk) {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">    	if(milk &gt;= 0) {</span>
+<span class="fc" id="L84">    		Inventory.milk = milk;</span>
+<span class="fc" id="L85">    	}</span>
+    	else {
+<span class="fc" id="L87">    		Inventory.milk = 0;</span>
+    	}
+<span class="fc" id="L89">    }</span>
+    /**
+     * Method getSugar.
+     * @return int
+     */
+    public int getSugar() {
+<span class="fc" id="L95">        return sugar;</span>
+    }
+    /**
+     * Method setSugar.
+     * @param sugar int
+     */
+    public void setSugar(int sugar) {
+<span class="fc bfc" id="L102" title="All 2 branches covered.">    	if(sugar &gt;= 0) {</span>
+<span class="fc" id="L103">    		Inventory.sugar = sugar;</span>
+<span class="fc" id="L104">    	}</span>
+    	else {
+<span class="fc" id="L106">    		Inventory.sugar = 0;</span>
+    	}
+<span class="fc" id="L108">    }</span>
+    
+    /**
+     * Returns true if there are enough ingredients to make
+     * the beverage.
+     * @param r
+    
+     * @return boolean */
+    public boolean enoughIngredients(Recipe r) {
+<span class="fc" id="L117">        boolean isEnough = true;</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if(Inventory.coffee &lt; r.getAmtCoffee()) {</span>
+<span class="fc" id="L119">            isEnough = false;</span>
+        }
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if(Inventory.milk &lt; r.getAmtMilk()) {</span>
+<span class="fc" id="L122">            isEnough = false;</span>
+        }
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if(Inventory.sugar &lt; r.getAmtSugar()) {</span>
+<span class="fc" id="L125">            isEnough = false;</span>
+        }
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if(Inventory.chocolate &lt; r.getAmtChocolate()) {</span>
+<span class="fc" id="L128">            isEnough = false;</span>
+        }
+<span class="fc" id="L130">        return isEnough;</span>
+    }
+    
+    /**
+     * Method toString.
+     * @return String
+     */
+    public String toString() {
+<span class="fc" id="L138">    	return &quot;Coffee: &quot; + getCoffee() + System.getProperty(&quot;line.separator&quot;)  +</span>
+<span class="fc" id="L139">			&quot;Milk: &quot; + getMilk() + System.getProperty(&quot;line.separator&quot;)  +</span>
+<span class="fc" id="L140">			&quot;Sugar: &quot; + getSugar() + System.getProperty(&quot;line.separator&quot;)  +</span>
+<span class="fc" id="L141">			&quot;Chocolate: &quot; + getChocolate() + System.getProperty(&quot;line.separator&quot;) ;</span>
+    }
+    private void readObject(ObjectInputStream stream) 
+            throws IOException, ClassNotFoundException{
+<span class="nc" id="L145">        stream.defaultReadObject();</span>
+<span class="nc" id="L146">	}</span>
+    
+    public Inventory deepCopy(){    	
+<span class="fc" id="L149">		return new Inventory(coffee, milk, sugar, chocolate);    	</span>
+    }
+    protected Object clone() throws CloneNotSupportedException {
+   	 
+<span class="fc" id="L153">        final Inventory clone=(Inventory)super.clone();</span>
+     
+<span class="fc" id="L155">        return clone;</span>
+        
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>CoffeeMaker (Apr 24, 2016 6:32:59 PM)</div></body></html>
