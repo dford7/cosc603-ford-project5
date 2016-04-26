@@ -1,8 +1,5 @@
 package edu.towson.cis.cosc603.project5.coffeemaker;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
 import junit.framework.TestCase;
 
 /**
@@ -10,12 +7,12 @@ import junit.framework.TestCase;
  */
 public class CoffeeMakerTest extends TestCase implements Cloneable{
 	private CoffeeMaker cm;
-	private Inventory i;
+	private Inventory iv;
 	private Recipe r1;
 
 	public void setUp() {
 		cm = new CoffeeMaker();
-		i = cm.checkInventory();
+		iv = cm.checkInventory();
 
 		r1 = new Recipe("Coffee", 50, 6, 1, 1, 0);
 	/*	r1.setName("Coffee");
@@ -42,8 +39,26 @@ public class CoffeeMakerTest extends TestCase implements Cloneable{
 		newRecipe.setAmtSugar(2);
 		assertTrue(cm.editRecipe(r1, newRecipe));
 	}
-	private void readObject(ObjectInputStream stream) 
-            throws IOException, ClassNotFoundException{
-        stream.defaultReadObject();
+	
+	public void testAddInventory1(){
+		
+		assertTrue(cm.addInventory(iv.getCoffee(), iv.getMilk(), iv.getSugar()
+				, iv.getChocolate()));
+			
 	}
+	
+	public void testCheckInventory(){
+		Inventory t = cm.checkInventory();
+		assertTrue(t != null);
+		assertEquals(t.getChocolate(), 15);		
+		assertEquals(t.getCoffee(), 15);
+		assertEquals(t.getMilk(), 15);
+		assertEquals(t.getSugar(), 15);	
+	}
+	
+	public void testPurchaseBeverage1(){
+		cm.addRecipe(r1);
+		assertEquals(10,cm.makeCoffee(r1, 60));
+	}
+		
 }

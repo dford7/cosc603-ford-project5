@@ -38,7 +38,7 @@ public class CoffeeMaker implements Cloneable{
 	
 	 * @return boolean */
 	public boolean addRecipe(Recipe r) {
-        boolean canAddRecipe = isRecipeExisting(r);
+        boolean canAddRecipe = !(isRecipeExisting(r));
         
         //Check for an empty recipe, add recipe to first empty spot
         if(canAddRecipe) {
@@ -61,7 +61,8 @@ public class CoffeeMaker implements Cloneable{
 		int emptySpot = -1;
 		for(int i = 0; i < NUM_RECIPES; i++) {
 			if(!recipeFull[i]) {
-				emptySpot = i;        			     			
+				emptySpot = i;
+				break;
 			}
 		}
 		return emptySpot;
@@ -114,7 +115,8 @@ public class CoffeeMaker implements Cloneable{
         	if(recipeArray[i].getName() != null && 
         			newRecipe.equals(recipeArray[i]) ) {	           
             	recipeArray[i] = new Recipe();            	
-            	canEditRecipe = addRecipe(newRecipe);            	
+            	canEditRecipe = addRecipe(newRecipe);   
+            	canEditRecipe = true;
         	}
         }
         return canEditRecipe;
@@ -130,7 +132,7 @@ public class CoffeeMaker implements Cloneable{
      * @return boolean */
     public boolean addInventory(int amtCoffee, int amtMilk, int amtSugar, int amtChocolate) {
         boolean canAddInventory = true;
-        if(amtCoffee < 0 || amtMilk < 0 || amtSugar > 0 || amtChocolate < 0) { 
+        if(amtCoffee < 0 || amtMilk < 0 || amtSugar <  0 || amtChocolate < 0) { 
             canAddInventory = false;
         }
         else {
