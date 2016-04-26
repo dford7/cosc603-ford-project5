@@ -14,24 +14,42 @@ public class Main implements Cloneable{
     private static CoffeeMaker coffeeMaker;
 
     public static void mainMenu() throws CloneNotSupportedException {
-        System.out.println("1. Add a recipe");
-        System.out.println("2. Delete a recipe");
-        System.out.println("3. Edit a recipe");
-        System.out.println("4. Add inventory");
-        System.out.println("5. Check inventory");
-        System.out.println("6. Make coffee");
-        System.out.println("0. Exit" + System.getProperty("line.separator") );
+        System.out.println("1. Add a recipe"
+        		+"2. Delete a recipe" + System.getProperty("line.separator")
+        		+"3. Edit a recipe" + System.getProperty("line.separator")
+        		+"4. Add inventory" + System.getProperty("line.separator")
+        		+"5. Check inventory" + System.getProperty("line.separator")
+        		+"6. Make coffee" + System.getProperty("line.separator")
+        		+ "0. Exit" + System.getProperty("line.separator") );
         
         //Get user input
         final int userInput = stringToInt(inputOutput("Please press the number that corresponds to what you would like the coffee maker to do."));
         
-        if(userInput == 1) addRecipe();
-        if(userInput == 2) deleteRecipe();
-        if(userInput == 3) editRecipe();
-        if(userInput == 4) addInventory();
-        if(userInput == 5) checkInventory();
-        if(userInput == 6) makeCoffee();
-        if(userInput == 0) System.exit(0);
+        switch (userInput) {
+		case 1:
+			addRecipe();
+			break;
+		case 2:
+			deleteRecipe();
+			break;
+		case 3:
+			editRecipe();
+			break;
+		case 4:
+			addInventory();
+			break;
+		case 5:
+			checkInventory();
+			break;
+		case 6:
+			makeCoffee();
+			break;		
+		case 0:
+			System.exit(0);
+			break;			
+		default:
+			break;
+		}       
     }
 	public static void addRecipe() throws CloneNotSupportedException {
 	    //Read in recipe name
@@ -41,35 +59,35 @@ public class Main implements Cloneable{
 		final String priceString = inputOutput(System.getProperty("line.separator")  + "Please enter the recipe price: $");
 		final int price = stringToInt(priceString);
 	    if(price < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt coffee
 	    final String coffeeString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of coffee in the recipe: ");
 	    final int amtCoffee = stringToInt(coffeeString);
 	    if(amtCoffee < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt milk
 	    final String milkString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of milk in the recipe: ");
 	    final int amtMilk = stringToInt(milkString);
 	    if(amtMilk < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt sugar
 	    final String sugarString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of sugar in the recipe: ");
 	    final int amtSugar = stringToInt(sugarString);
 	    if(amtSugar < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt chocolate
 	    final String chocolateString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of chocolate in the recipe: ");
 	    final int amtChocolate = stringToInt(chocolateString);
 	    if(amtChocolate < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	 //   boolean recipeAdded = false;
@@ -90,7 +108,7 @@ public class Main implements Cloneable{
 	    else {
 	    	System.out.println(name + "could not be added.");
 	    }
-	    mainMenu();
+	   // mainMenu();
     }
     
     public static void deleteRecipe() throws CloneNotSupportedException {
@@ -101,7 +119,7 @@ public class Main implements Cloneable{
         final String recipeToDeleteString = inputOutput("Please select the number of the recipe to delete.");
         final int recipeToDelete = stringToInt(recipeToDeleteString) - 1;
 	    if(recipeToDelete < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
         
 	    final boolean recipeDeleted = coffeeMaker.deleteRecipe(recipes[recipeToDelete]);
@@ -115,7 +133,7 @@ public class Main implements Cloneable{
 	    	System.out.println(recipes[recipeToDelete].getName() + "could not be deleted.");
 	    	}
         
-        mainMenu();
+      //  mainMenu();
     }
     
     public static void editRecipe() throws CloneNotSupportedException {
@@ -126,7 +144,7 @@ public class Main implements Cloneable{
         final String recipeToEditString = inputOutput("Please select the number of the recipe to edit.");
         final int recipeToEdit = stringToInt(recipeToEditString) -1;
 	    if(recipeToEdit < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
         
 	    final Recipe oldRecipe = recipes[recipeToEdit];
@@ -138,35 +156,35 @@ public class Main implements Cloneable{
 	    final String priceString = inputOutput(System.getProperty("line.separator")  + "Please enter the recipe price: $");
 	    final int price = stringToInt(priceString);
 	    if(price < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt coffee
 	    final String coffeeString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of coffee in the recipe: ");
 	    final int amtCoffee = stringToInt(coffeeString);
 	    if(amtCoffee < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt milk
 	    final String milkString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of milk in the recipe: ");
 	    final int amtMilk = stringToInt(milkString);
 	    if(amtMilk < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt sugar
 	    final String sugarString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of sugar in the recipe: ");
 	    final int amtSugar = stringToInt(sugarString);
 	    if(amtSugar < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt chocolate
 	    final String chocolateString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of chocolate in the recipe: ");
 	    final int amtChocolate = stringToInt(chocolateString);
 	    if(amtChocolate < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    final Recipe newRecipe = new Recipe(name, price, amtChocolate, 
 				amtMilk, amtSugar, amtChocolate);
@@ -189,7 +207,7 @@ public class Main implements Cloneable{
 	    	System.out.println(oldRecipe.getName() + "could not be edited.");
 	    	}
         
-        mainMenu();
+       // mainMenu();
     }
     
     public static void addInventory() throws CloneNotSupportedException {
@@ -197,38 +215,40 @@ public class Main implements Cloneable{
     	final String coffeeString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of coffee to add: ");
     	final int amtCoffee = stringToInt(coffeeString);
 	    if(amtCoffee < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt milk
 	    final String milkString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of milk to add: ");
 	    final int amtMilk = stringToInt(milkString);
 	    if(amtMilk < 0) {
-	    	mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt sugar
 	    final String sugarString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of sugar to add: ");
 	    final int amtSugar = stringToInt(sugarString);
 	    if(amtSugar < 0) {
-	    	mainMenu();
+	    	//mainMenu();
+	    	return ;
 	    }
 	    
 	    //Read in amt chocolate
 	    final String chocolateString = inputOutput(System.getProperty("line.separator")  + "Please enter the units of chocolate to add: ");
 	    final int amtChocolate = stringToInt(chocolateString);
 	    if(amtChocolate < 0) {
-	    	mainMenu();
+	    //	mainMenu();
+	    	return ;
 	    }
 	    
         coffeeMaker.addInventory(amtCoffee, amtMilk, amtSugar, amtChocolate);
-        mainMenu();
+      //  mainMenu();
     }
     
     public static void checkInventory() throws CloneNotSupportedException {
     	final Inventory inventory = coffeeMaker.checkInventory();
         System.out.println(inventory.toString());
-        mainMenu();
+      //  mainMenu();
     }
     
     public static void makeCoffee() throws CloneNotSupportedException {
@@ -239,20 +259,22 @@ public class Main implements Cloneable{
         final String recipeToPurchaseString = inputOutput("Please select the number of the recipe to purchase.");
         final int recipeToPurchase = stringToInt(recipeToPurchaseString) -1;
 	    if(recipeToPurchase < 0) {
-	    	mainMenu();
+	    //	mainMenu();
+	    	return ;
 	    }
         
 	    final String amountPaid = inputOutput("Please enter the amount you wish to pay");
 	    final int amountToPay = stringToInt(amountPaid);
 	    if(amountToPay < 0) {
-	    	mainMenu();
+	    //	mainMenu();
+	    	return ;
 	    }
         
 	    final Recipe recipe = recipes[recipeToPurchase];
 	    final int change = coffeeMaker.makeCoffee(recipe, amountToPay);
         
         System.out.println("Your change is: " + change + System.getProperty("line.separator")  + "");
-        mainMenu();
+      //  mainMenu();
     }
     
     /**
@@ -301,11 +323,11 @@ public class Main implements Cloneable{
     public static void main(String[] args) throws CloneNotSupportedException {
 	    coffeeMaker = new CoffeeMaker();
 	    System.out.println("Welcome to the CoffeeMaker!" + System.getProperty("line.separator") );
-	    mainMenu();
+	 //   mainMenu();
 	}
     
     private void readObject(ObjectInputStream stream) 
             throws IOException, ClassNotFoundException{
-        stream.defaultReadObject();
+     //   stream.defaultReadObject();
 	}
 }

@@ -58,14 +58,15 @@ public class CoffeeMaker implements Cloneable{
 	 * @return
 	 */
 	private int indexOfEmptyRecipe() {
-		int emptySpot = -1;
-		for(int i = 0; i < NUM_RECIPES; i++) {
+		//int emptySpot = -1;
+		int i = 0;
+		while (i < NUM_RECIPES) {
 			if(!recipeFull[i]) {
-				emptySpot = i;
-				break;
-			}
-		}
-		return emptySpot;
+	               return i;
+            }
+			i++;
+		}  
+		return -1;
 	}
 
 	/**
@@ -76,11 +77,13 @@ public class CoffeeMaker implements Cloneable{
 	private boolean isRecipeExisting(Recipe r) {
 		// boolean canAddRecipe = true;
 		//Check if the recipe already exists
-        for(int i = 0; i < NUM_RECIPES; i++) {
-            if(r.equals(recipeArray[i])) {
-               return true;
+		int i = 0;
+		while (i < NUM_RECIPES) {
+			if(r.equals(recipeArray[i])) {
+	               return true;
             }
-        }
+			i++;
+		}     
 		return false;
 	}
     
@@ -91,16 +94,18 @@ public class CoffeeMaker implements Cloneable{
 	
 	 * @return boolean */
     public boolean deleteRecipe(Recipe r) {
-        boolean canDeleteRecipe = false;
+      //  boolean canDeleteRecipe = false;
         if(r != null) {
-	        for(int i = 0; i < NUM_RECIPES; i++) {
-	            if(r.equals(recipeArray[i])) {
-	              //  recipeArray[i] = recipeArray[i]; 
-	                canDeleteRecipe = true;
-	            }
-	        }
+        	int i = 0;
+    		while (i < NUM_RECIPES) {
+    			if(r.equals(recipeArray[i])) {
+    	               return true;
+                }
+    			i++;
+    		}         		
         }
-        return canDeleteRecipe;
+      // return canDeleteRecipe;
+        return false;
     }
     
     /**
@@ -132,17 +137,49 @@ public class CoffeeMaker implements Cloneable{
      * @return boolean */
     public boolean addInventory(int amtCoffee, int amtMilk, int amtSugar, int amtChocolate) {
         boolean canAddInventory = true;
-        if(amtCoffee < 0 || amtMilk < 0 || amtSugar <  0 || amtChocolate < 0) { 
+        if(isValidInventory(amtCoffee, amtMilk, amtSugar, amtChocolate)) { 
             canAddInventory = false;
         }
-        else {
+        else {     
+        	int tmp =  inventory.getCoffee();
 	        inventory.setCoffee(inventory.getCoffee() + amtCoffee);
+	        tmp += amtCoffee;
+	        if (tmp != inventory.getCoffee()) {
+	        	throw new RuntimeException();
+			}
+	        tmp = inventory.getMilk();
 	        inventory.setMilk(inventory.getMilk() + amtMilk);
+	        tmp += amtMilk;
+	        if (tmp != inventory.getMilk()) {
+	        	throw new RuntimeException();
+			}
+	        tmp = inventory.getSugar();
 	        inventory.setSugar(inventory.getSugar() + amtSugar);
+	        tmp += amtSugar;
+	        if (tmp != inventory.getSugar()) {
+	        	throw new RuntimeException();
+			}
+	        tmp = inventory.getChocolate();
 	        inventory.setChocolate(inventory.getChocolate() + amtChocolate);
+	        tmp += amtChocolate;
+	        if (tmp != inventory.getChocolate()) {
+	        	throw new RuntimeException();
+			}
         }
         return canAddInventory;
     }
+
+	/**
+	 * @param amtCoffee
+	 * @param amtMilk
+	 * @param amtSugar
+	 * @param amtChocolate
+	 * @return
+	 */
+	private boolean isValidInventory(int amtCoffee, int amtMilk, int amtSugar, int amtChocolate) {
+		return amtCoffee < 0 || amtMilk < 0 || 
+        		amtSugar <  0 || amtChocolate < 0;
+	}
     
     /**
      * Returns the inventory of the coffee maker
@@ -170,10 +207,30 @@ public class CoffeeMaker implements Cloneable{
             canMakeCoffee = false;
         }
         if(canMakeCoffee) {
-	        inventory.setCoffee(inventory.getCoffee() + r.getAmtCoffee()); 
+        	int tmp = inventory.getCoffee();
+	        inventory.setCoffee(inventory.getCoffee() - r.getAmtCoffee());
+	        tmp -= r.getAmtCoffee();
+	        if (tmp != inventory.getCoffee()) {
+	        	throw new RuntimeException();
+			}
+	        tmp = inventory.getMilk();
 	        inventory.setMilk(inventory.getMilk() - r.getAmtMilk());
+	        tmp -= r.getAmtMilk();
+	        if (tmp != inventory.getMilk()) {
+	        	throw new RuntimeException();
+			}
+	        tmp = inventory.getSugar();
 	        inventory.setSugar(inventory.getSugar() - r.getAmtSugar());
+	        tmp -= r.getAmtSugar();
+	        if (tmp != inventory.getSugar()) {
+	        	throw new RuntimeException();
+			}
+	        tmp = inventory.getChocolate();
 	        inventory.setChocolate(inventory.getChocolate() - r.getAmtChocolate());
+	        tmp -= r.getAmtChocolate();
+	        if (tmp != inventory.getChocolate()) {
+	        	throw new RuntimeException();
+			}
             return amtPaid - r.getPrice();
         }
         else {
@@ -189,9 +246,11 @@ public class CoffeeMaker implements Cloneable{
     public final  Recipe[] getRecipes() throws CloneNotSupportedException {  
     	
     	final Recipe [] reps = new Recipe[recipeArray.length] ;
-    	for (int i = 0; i < reps.length; i++) {
+    	int i = 0;
+    	while (i < reps.length) {
     		reps[i] = (Recipe) recipeArray[i].clone();
-		}
+    		i++;
+		}    	
     	
         return  reps;
     }
@@ -214,7 +273,7 @@ public class CoffeeMaker implements Cloneable{
 	}
 	private void readObject(ObjectInputStream stream) 
             throws IOException, ClassNotFoundException{
-        stream.defaultReadObject();
+       // stream.defaultReadObject();
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {

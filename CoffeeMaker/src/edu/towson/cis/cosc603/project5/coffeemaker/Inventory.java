@@ -10,16 +10,28 @@ import java.io.ObjectInputStream;
  */
 public class Inventory implements Cloneable{
     
-    private static int coffee;
-    private static int milk;
-    private static int sugar;
-    private static int chocolate;
+    private  int coffee;
+    private  int milk;
+    private  int sugar;
+    private  int chocolate;
     
     public Inventory() {
     	setCoffee(15);
     	setMilk(15);
     	setSugar(15);
     	setChocolate(15);
+    	if (this.coffee != 15) {    		
+    		throw new RuntimeException();    		
+		}
+    	if (this.milk != 15) {    		
+    		throw new RuntimeException();    		
+		}
+    	if (this.sugar != 15) {    		
+    		throw new RuntimeException();    		
+		}
+    	if (this.chocolate != 15) {    		
+    		throw new RuntimeException();    		
+		}
     }
     
     public Inventory(int coffee, int milk, int sugar, int chocolate) {
@@ -27,6 +39,18 @@ public class Inventory implements Cloneable{
     	setMilk(milk);
     	setSugar(sugar);
     	setChocolate(chocolate);
+    	if (this.coffee != coffee) {    		
+    		throw new RuntimeException();    		
+		}
+    	if (this.milk != milk) {    		
+    		throw new RuntimeException();    		
+		}
+    	if (this.sugar != sugar) {    		
+    		throw new RuntimeException();    		
+		}
+    	if (this.chocolate != chocolate) {    		
+    		throw new RuntimeException();    		
+		}
     }
     
     /**
@@ -41,11 +65,11 @@ public class Inventory implements Cloneable{
      * @param chocolate int
      */
     public void setChocolate(int chocolate) {
-    	if(chocolate >= 0) {
-    		Inventory.chocolate = chocolate;
+    	if(chocolate > 0) {
+    		this.chocolate = chocolate;
     	}
     	else {
-    		Inventory.chocolate = 0;
+    		this.chocolate = 0;
     	}
         
     }
@@ -61,11 +85,11 @@ public class Inventory implements Cloneable{
      * @param coffee int
      */
     public void setCoffee(int coffee) {
-    	if(coffee >= 0) {
-    		Inventory.coffee = coffee;
+    	if(coffee > 0) {
+    		this.coffee = coffee;
     	}
     	else {
-    		Inventory.coffee = 0;
+    		this.coffee = 0;
     	}
     }
     /**
@@ -80,11 +104,11 @@ public class Inventory implements Cloneable{
      * @param milk int
      */
     public void setMilk(int milk) {
-    	if(milk >= 0) {
-    		Inventory.milk = milk;
+    	if(milk > 0) {
+    		this.milk = milk;
     	}
     	else {
-    		Inventory.milk = 0;
+    		this.milk = 0;
     	}
     }
     /**
@@ -99,11 +123,11 @@ public class Inventory implements Cloneable{
      * @param sugar int
      */
     public void setSugar(int sugar) {
-    	if(sugar >= 0) {
-    		Inventory.sugar = sugar;
+    	if(sugar > 0) {
+    		this.sugar = sugar;
     	}
     	else {
-    		Inventory.sugar = 0;
+    		this.sugar = 0;
     	}
     }
     
@@ -115,16 +139,16 @@ public class Inventory implements Cloneable{
      * @return boolean */
     public boolean enoughIngredients(Recipe r) {
         boolean isEnough = true;
-        if(Inventory.coffee < r.getAmtCoffee()) {
+        if(this.coffee < r.getAmtCoffee()) {
             isEnough = false;
         }
-        if(Inventory.milk < r.getAmtMilk()) {
+        if(this.milk < r.getAmtMilk()) {
             isEnough = false;
         }
-        if(Inventory.sugar < r.getAmtSugar()) {
+        if(this.sugar < r.getAmtSugar()) {
             isEnough = false;
         }
-        if(Inventory.chocolate < r.getAmtChocolate()) {
+        if(this.chocolate < r.getAmtChocolate()) {
             isEnough = false;
         }
         return isEnough;
@@ -142,7 +166,7 @@ public class Inventory implements Cloneable{
     }
     private void readObject(ObjectInputStream stream) 
             throws IOException, ClassNotFoundException{
-        stream.defaultReadObject();
+      //  stream.defaultReadObject();
 	}
     
     public Inventory deepCopy(){    	

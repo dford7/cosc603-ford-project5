@@ -32,7 +32,7 @@ public class Recipe implements Cloneable{
 	}
     
     public int filterInput(int input){
-    	if (input >= 0) {
+    	if (input > 0) {
     		return input;
 		}
     	return 0;
@@ -134,27 +134,18 @@ public class Recipe implements Cloneable{
     	if (r instanceof Recipe) {
     		final Recipe rep = (Recipe) r;
     		
-    		if (rep.getName() == null 
-    				|| this.name == null) {
-				return false;
-			}
-    		if ((this.name).equals(rep.getName())) {
-    			return true;
-			}    		
+    		if (rep.getName() != null 
+    				&& this.name != null) {
+    			return (this.name).equals(rep.getName());
+			}    		    		
 		}
     	return false;       
     }
     
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.name);
-        hash = 97 * hash + this.price;
-        hash = 97 * hash + this.amtCoffee;
-        hash = 97 * hash + this.amtMilk;
-        hash = 97 * hash + this.amtSugar;
-        hash = 97 * hash + this.amtChocolate;
-    	return hash;       
+      //  int hash = 7;       
+    	return 7;       
     }
     
     /**
@@ -167,7 +158,7 @@ public class Recipe implements Cloneable{
     
     private void readObject(ObjectInputStream stream) 
             throws IOException, ClassNotFoundException{
-        stream.defaultReadObject();
+     //   stream.defaultReadObject();
 	}
     
     public final  Recipe deepCopy(){
@@ -176,12 +167,12 @@ public class Recipe implements Cloneable{
     	return rep;
     }
     
-    protected Object clone() throws CloneNotSupportedException {
-    	 
-    	final Recipe clone=(Recipe)super.clone();
-     
-        return clone;
-        
+    protected Object clone() throws CloneNotSupportedException {    	 
+    	Recipe clone=(Recipe)super.clone();   
+    	if (clone == null) {
+    		throw new RuntimeException();
+		}
+        return (Object)clone;        
     }
     
 }
